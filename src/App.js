@@ -24,6 +24,9 @@ class App extends React.Component {
       "size": 200,
       "label": true,
       "dashed": true,
+      "minValue": 0,
+      "maxValue": 100,
+      "enableInput": false,
     };
 
     let circleGauge2Conf = {
@@ -34,6 +37,9 @@ class App extends React.Component {
       "size": 100,
       "label": true,
       "dashed": false,
+      "minValue": 0,
+      "maxValue": 100,
+      "enableInput": true,
     };
 
     return (

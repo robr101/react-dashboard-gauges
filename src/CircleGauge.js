@@ -20,13 +20,19 @@ class CircleGauge extends React.Component {
         this.draw(ctx);
     }
 
+    // utility function, map a value in one range to it's corresponding value in another
+    mapRange(value, inMin, inMax, outMin, outMax) {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+
+    // map a value in the gauge's configured range to radians
     valueToRadians(value) {
-        // TODO: accept any range to map to radians
-        let inmin = 0;
-        let inmax = 100;
-        let outmax = 2 * Math.PI;
-        let outmin = 0;
-        return (value - inmin) * (outmax - outmin) / (inmax - inmin) + outmin;
+        return this.mapRange(value, this.state.minValue, this.state.maxValue, 0, Math.PI * 2);
+    }
+
+    // map an angle in radians to the gauge's configured range
+    radiansToValue(radians) {
+        return this.mapRange(radians, 0, Math.PI * 2, this.state.minValue, this.state.maxValue);
     }
 
     draw(ctx) {
