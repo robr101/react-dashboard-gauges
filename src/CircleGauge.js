@@ -5,20 +5,23 @@ class CircleGauge extends React.Component {
     constructor(props) {
         super(props);
         this.state = props.config;
-        // console.log(this.state);
     }
 
+
+    // canvas doesn't exist until the component is mounted
     componentDidMount() {
         var ctx = this.canvas.getContext('2d');
-        this.drawGauge(ctx);
+        this.draw(ctx);
     }
 
+    // redraw the gauge when component gets updated with new props
     componentDidUpdate() {
         var ctx = this.canvas.getContext('2d');
-        this.drawGauge(ctx);
+        this.draw(ctx);
     }
 
     valueToRadians(value) {
+        // TODO: accept any range to map to radians
         let inmin = 0;
         let inmax = 100;
         let outmax = 2 * Math.PI;
@@ -26,16 +29,15 @@ class CircleGauge extends React.Component {
         return (value - inmin) * (outmax - outmin) / (inmax - inmin) + outmin;
     }
 
-    drawGauge(ctx) {
-        // console.log(this.state);
-
+    draw(ctx) {
         let GaugeTop = 2 * Math.PI * 0.75; // in canvas's arc function 0 rad starts at the positive x axis, 2rad * 3/4 gives you the top of the circle
         let center = this.state.size / 2;  // center of the canvas
         let baseRadius = (this.state.size * 0.5) - (this.state.thickness * 0.5); // radius to take up the full size of the canvas, given thickness provided
 
+        // erase the canvas
         ctx.clearRect(0, 0, this.state.size, this.state.size);
 
-        // background circle
+        // draw background circle
         ctx.setLineDash([0]);
         ctx.strokeStyle = this.state.bg;
         ctx.lineWidth = this.state.thickness;
@@ -43,7 +45,7 @@ class CircleGauge extends React.Component {
         ctx.arc(center, center, baseRadius, 0, 2 * Math.PI);
         ctx.stroke();
 
-        // value circle
+        // draw value circle
         ctx.fillStyle = this.state.color;
         ctx.font = "40px courier";
         ctx.beginPath();
@@ -51,6 +53,7 @@ class CircleGauge extends React.Component {
         ctx.strokeStyle = this.state.color;
         ctx.lineWidth = this.state.thickness;
 
+        // overwrite the strokeStyle with a gradient that looks "shiny"
         if (this.state.shiny === true) {
             let outerRad = baseRadius + (this.state.thickness / 2);
             let innerRad = baseRadius - (this.state.thickness / 2);
@@ -65,6 +68,7 @@ class CircleGauge extends React.Component {
 
         if (this.state.dashed === true)
         {
+            // TODO: figure out the math for segmenting the circle into this.state.segments
             ctx.setLineDash([32, 2]);
         }
 
@@ -72,6 +76,7 @@ class CircleGauge extends React.Component {
         ctx.stroke();
 
         if (this.state.label === true) {
+            // TODO: add font property and calculate the width/height of the value as a string first so we can dead center the label
             ctx.fillText(this.props.value, this.state.size / 3, this.state.size / 2);
         }
     }

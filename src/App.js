@@ -1,7 +1,7 @@
 
 import React from 'react';
 import './App.css';
-import CircleGauge from './circle-gauge'
+import CircleGauge from './CircleGauge'
 import InputSlider from './InputSlider';
 
 class App extends React.Component {
