@@ -36,6 +36,8 @@ class CircleGauge extends React.Component {
         return this.mapRange(radians, 0, Math.PI * 2, this.state.minValue, this.state.maxValue);
     }
 
+
+    // callback for onMouseMove event on canvas, need to check if the mouse is down to change value
     handleDragInput(event) {
 
         if (this.state.mouseDown) {
@@ -46,7 +48,14 @@ class CircleGauge extends React.Component {
             const y = event.clientY - rect.top;
 
             const center = this.state.size / 2;
-            let angleToCenter = Math.atan2(y - center, x - center) + (Math.PI * 2 * ( 1 / 4 ));
+            
+            // both the canvas api and Math object consider 0 radians as the positive x-axis,
+            // ...so we have to add 1/2 pi radians to start at the top
+            let angleToCenter = Math.atan2(y - center, x - center) + (Math.PI * 0.5);
+            // ...then when we get to 1.5 pi radians, atan2 will go negative, so need to add 2pi radians
+            if (angleToCenter < 0) {
+                angleToCenter += (Math.PI * 2);
+            }
 
             let newValue = Math.round(this.radiansToValue(angleToCenter));
 
@@ -57,6 +66,7 @@ class CircleGauge extends React.Component {
 
     }
 
+    // keep track if the mouse button is down, to track drags for input
     handleMouseDown(event) {
         this.setState({mouseDown: true});
     }
