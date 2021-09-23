@@ -26,11 +26,11 @@ class App extends React.Component {
   render() {
     let circleGaugeConf = {
       "thickness": 30,
-      "bg": 'rgba(0,0,0,0)',
+      "bg": '#000',
       "color": '#00daff',
       "shiny": true,
       "size": 200,
-      "label": true,
+      "label": false,
       "dashed": true,
       "minValue": 0,
       "maxValue": 100,
@@ -43,11 +43,11 @@ class App extends React.Component {
       "color": '#00ff00',
       "shiny": false,
       "size": 300,
-      "label": true,
+      "label": false,
       "dashed": false,
       "minValue": 0,
       "maxValue": 100,
-      "enableInput": true,
+      "enableInput": false,
     };
 
     return (
@@ -58,7 +58,6 @@ class App extends React.Component {
         </div>
         <div className="gauge-slider">
           <CircleGauge value={this.state.circleGaugeVal} config={circleGaugeConf} inputCallback={this.gaugeInputCallback}/>
-          <InputSlider callback={this.sliderCallback} />
         </div>
         
 
