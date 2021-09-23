@@ -15,6 +15,10 @@ class App extends React.Component {
     this.setState({circleGauge2Val: value});
   }
 
+  gaugeInputCallback = value => {
+    this.setState({circleGauge2Val: value});
+  }
+
   render() {
     let circleGaugeConf = {
       "thickness": 30,
@@ -34,7 +38,7 @@ class App extends React.Component {
       "bg": '#ccc',
       "color": '#00ff00',
       "shiny": false,
-      "size": 100,
+      "size": 300,
       "label": true,
       "dashed": false,
       "minValue": 0,
@@ -45,11 +49,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="gauge-slider">
-            <CircleGauge value={this.state.circleGauge2Val} config={circleGauge2Conf}/>
+            <CircleGauge value={this.state.circleGauge2Val} config={circleGauge2Conf} inputCallback={this.gaugeInputCallback}/>
             <InputSlider callback={this.slider2Callback} />
         </div>
         <div className="gauge-slider">
-          <CircleGauge value={this.state.circleGaugeVal} config={circleGaugeConf}/>
+          <CircleGauge value={this.state.circleGaugeVal} config={circleGaugeConf} />
           <InputSlider callback={this.sliderCallback} />
         </div>
         

@@ -5,6 +5,7 @@ class CircleGauge extends React.Component {
     constructor(props) {
         super(props);
         this.state = props.config;
+        this.setState({mouseDown: false});
     }
 
 
@@ -33,6 +34,35 @@ class CircleGauge extends React.Component {
     // map an angle in radians to the gauge's configured range
     radiansToValue(radians) {
         return this.mapRange(radians, 0, Math.PI * 2, this.state.minValue, this.state.maxValue);
+    }
+
+    handleDragInput(event) {
+
+        if (this.state.mouseDown) {
+            // get the mouse position on click
+            // https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const center = this.state.size / 2;
+            let angleToCenter = Math.atan2(y - center, x - center) + (Math.PI * 2 * ( 1 / 4 ));
+
+            let newValue = Math.round(this.radiansToValue(angleToCenter));
+
+            if (this.state.enableInput === true) {
+                this.props.inputCallback(newValue);
+            }
+        }
+
+    }
+
+    handleMouseDown(event) {
+        this.setState({mouseDown: true});
+    }
+
+    handleMouseUp(event) {
+        this.setState({mouseDown: false});
     }
 
     draw(ctx) {
@@ -90,7 +120,12 @@ class CircleGauge extends React.Component {
     render() {
         return (
             <div className="circle-gauge-container">
-                <canvas ref={(canvas) => {this.canvas = canvas}} width={this.state.size} height={this.state.size} />
+                <canvas ref={(canvas) => {this.canvas = canvas}} 
+                        width={this.state.size} 
+                        height={this.state.size}
+                        onMouseMove={this.handleDragInput.bind(this)}
+                        onMouseDown={this.handleMouseDown.bind(this)}
+                        onMouseUp={this.handleMouseUp.bind(this)} />
             </div>
         )
     }
